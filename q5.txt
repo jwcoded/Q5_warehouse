@@ -1,0 +1,170 @@
+inventory = {
+ "chesterfield": {"price": 500, "stock": 100},
+ "console": {"price": 250, "stock": 150},
+ "bolster": {"price": 250, "stock": 250},
+             
+
+}
+
+hist_0 = []
+hist_1 = []
+hist_2 = []
+hist_3 = []
+hist_4 = []
+hist_5 = []
+
+history = [[hist_0], [hist_1], [hist_2], [hist_3], [hist_4], [hist_5]]
+
+
+
+print("\nWelcome to the Furniture Warehouse!\n")
+print("Here are all the available Commands: " )
+
+
+commands = ["Balance", "Sale", "Purchase", "Account", "List", "Warehouse", "Review", "End"]
+balance = 10000
+
+while True:
+ print("\nCommands:")
+ for item in commands:
+  print(f"{commands.index(item) + 1}. {item}")
+ 
+ try:
+  info = int(input("\nPlease enter a Command number: "))
+ except ValueError:
+  print("\nPlease enter a number between 1-8.") 
+  continue
+ 
+ if info == 1:
+  operation = input("Enter 'add' or 'subtract' to edit account balance: ")
+  if operation != "add" and operation != "subtract":
+   print("P\nlease only enter 'add' or 'subtract'.")
+  else:
+   try:
+    amount = int(input("Enter the amount: "))
+   except ValueError:
+    print("\nPlease enter numbers only.")
+    continue
+   if operation == "add":
+    balance += amount
+    act_11 = ("Added {} to the balance.".format(amount))
+    hist_0.append(act_11)
+    print("\nCurrent account balance is: ")
+    print(balance)
+   elif operation == "subtract":
+    balance -= amount
+    act_12 = ("Subtracted {} from the balance.".format(amount))
+    hist_0.append(act_12)
+    print("\nCurrent account balance is:\n")
+    print(balance)
+
+
+ elif info == 2: 
+  print("Currently, we stock 3 products; 'console','chesterfield' and 'bolster'.")
+  item_name = input("Enter the name of the product sold: ")
+  if item_name != "console" and item_name != "chesterfield" and item_name != "bolster":
+   print("\nSorry but that's not a valid answer.\nYou'll need to start over.")
+  else: 
+   try:
+    price_amount = float(input("Enter the price of the product: "))
+   except ValueError:
+    print("\nThe price must be a number :(")
+    continue
+   try:
+    stock_qty = int(input("Enter the quantity of the product: "))
+   except ValueError:
+    print("\nI can only accept a number input.\nSorry but you'll have to start over :(")
+    continue
+   calc_1 = (stock_qty * price_amount)
+   balance += calc_1
+   for item, details in inventory.items():
+    if item_name == item:
+     new_stock = details["stock"] - stock_qty
+     inventory[item] = {"price": price_amount, "stock": new_stock}
+     act_21 = ("Recored sales for {} {} at a price of {} each and updated account balance and inventory.".format(stock_qty, item_name, price_amount))
+     hist_1.append(act_21)
+     print("\nThank you, inventory and accounts have been updated.")
+
+
+ elif info == 3: 
+  print("Currently, we stock 3 products; 'console','chesterfield' and 'bolster'.")
+  item_name = input("Enter the name of the product purchased: ")
+  if item_name != "console" and item_name != "chesterfield" and item_name != "bolster":
+   print("\nYou've entered an invalid product name :(\nSorry but you'll have to start over. ")
+  else: 
+   try:
+    price_amount = float(input("Enter the price of the product: "))
+   except ValueError:
+    print("\nThe price must be a number\nSorry but you'll have to start over :(")
+    continue
+   try:
+    stock_qty = int(input("Enter the quantity of the product: "))
+   except ValueError:
+    print("\nThe quantity must be a number.\nSorry but you'll have to start over :(.")
+    continue
+   calc_1 = (stock_qty * price_amount)
+   balance -= calc_1
+   if (balance < 0):
+     print("\nUh oh, error, the account balance can not be less than zero! :/\nI think that you've made a mistake, it's ok you can try again.")
+     hist_2.append("Uh, tried to put the account in negative equity!")
+   else:
+    for item, details in inventory.items():
+     if item_name == item:
+      new_stock = details["stock"] + stock_qty
+      inventory[item] = {"price": price_amount, "stock": new_stock}
+      act_31 = ("Recorded purchase of {} {} at a cost of {} each, updated inventory and account balance.".format(stock_qty, item_name, price_amount))
+      hist_2.append(act_31)
+      print("Thank you, inventory and accounts have been updated.")
+
+
+ elif info == 4:
+  print("\nThe current Account Balance is" )
+  print(balance)
+  hist_3.append("Viewed account balance.")
+
+
+ elif info == 5:
+  print("Inventory: ")
+  hist_4.append("Viewed inventory.")
+  for item, details in inventory.items(): 
+   print(f"{item.capitalize()}: ")
+   for detail, value in details.items():
+    print(f"- {detail.capitalize()}: {value}")
+    
+
+ elif info == 6:
+  print("Currently, we stock 3 products; 'console','chesterfield' and 'bolster'.")
+  thing = input( "Enter the name of the product you'd like to view information on: ")
+  if thing != "console" and thing != "bolster" and thing != "chesterfield":
+   print("\nI can only list inventory for products we stock.")
+   continue
+  print(f"\nInventory in {thing.capitalize()}: ")
+  for item, details in inventory.items():
+    for detail, value in details.items():
+     if item == thing:
+      act_61 =("Viewed product status for {}.".format(thing))
+      hist_5.append(act_61)
+      print(f"\n {detail.capitalize()}: {value}" )
+
+
+ elif info == 7:
+   print("\nYou have chosen to review the program history.\n")
+   print("\nThere is history recorded for each section.\n\nThe sections are numbered as follows:\n\n0-Balance\n1-Sales\n2-Purchases\n3-Account\n4-List\n5-Warehouse")
+   print("Enter the number of the sections you wish you view history for.")
+   fr = int(input("from: "))
+   to = int(input("to: "))
+   if (0 <= fr <= 6 ) and (1 <= to <= 7):
+    history_2 = (history[fr:to])
+    print("\nReview:\n")
+    print(*history_2, sep = "\n")
+   else:
+    print("\nSorry that request is out of range :(")
+    continue
+   
+ elif 0 == info: 
+  print("\nSorry, not a valid input but you can try again :)") 
+ 
+
+ else:
+  print("The End")
+  break
